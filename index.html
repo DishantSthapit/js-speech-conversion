@@ -1,0 +1,66 @@
+<!doctype html>
+	<head>
+		<style>
+			body {
+			    font-family: arial;
+			}
+			button {
+			    padding:10px;
+			    background-color:#CE0E2D;
+			    color: #FFFFFF;
+			    border: 0px;
+			    cursor:pointer;
+			    border-radius: 8px;
+			}
+			#output {
+			    background-color:#F9F9F9;
+			    padding:10px;
+			    width: 100%;
+			    margin-top:20px;
+			    line-height:30px;
+			}
+			.hide {
+			    display:none;
+			}
+		</style>
+		<title>JavaScript Speech Conversion</title>
+	</head>
+	<body>
+		<h2>JavaScript Speech Conversion</h2>
+        <p><button type="button" onclick="runSpeechRecognition()">Speech Conversion</button> &nbsp; <span id="action"></span></p>
+        <div id="output" class="hide"></div>
+		<script>
+			/* JS comes here */
+		    function runSpeechRecognition() {
+		        // get output div reference
+		        var output = document.getElementById("output");
+		        // get action element reference
+		        var action = document.getElementById("action");
+                // new speech recognition object
+                var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
+                var recognition = new SpeechRecognition();
+            
+                // This runs when the speech recognition service starts
+                recognition.onstart = function() {
+                    action.innerHTML = "<small>listening, please speak...</small>";
+                };
+                
+                recognition.onspeechend = function() {
+                    action.innerHTML = "<small>stopped listening, hope you are done...</small>";
+                    recognition.stop();
+                }
+              
+                // This runs when the speech recognition service returns result
+                recognition.onresult = function(event) {
+                    console.log(event.results)
+                    var transcript = event.results[0][0].transcript;
+                    output.innerHTML = "<b>Text:</b> " + transcript;
+                    output.classList.remove("hide");
+                };
+              
+                 // start recognition
+                 recognition.start();
+	        }
+		</script>
+	</body>
+</html>
